@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+
     return (
         <nav className="mb-24">
             <div className="mx-auto px-4 lg:px-6">
@@ -57,7 +58,7 @@ const Navbar = () => {
                             <img src={Discord} className="h-9 w-9" alt="Discord" />
                         </a>
                         {/* Avatar */}
-                        <img src={Orangie} className="h-10 w-10 rounded-full" />
+                        <img onClick={() => navigate("/dashboard")} src={Orangie} className="h-10 w-10 rounded-full cursor-pointer" />
                     </div>
 
                     {/* Mobile menu button */}
