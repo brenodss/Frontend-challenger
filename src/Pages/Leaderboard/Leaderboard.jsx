@@ -1,9 +1,10 @@
+// App.jsx
 import { useState } from 'react';
+import SolanaLogo from '../../assets/solana-sol-logo.svg'
 import { Navigation } from './Components/TokenTable/Components/Navigation';
 import { TokenTable } from './Components/TokenTable/Table';
 import Navbar from '../../Navbar';
-import SolanaLogo from '../../assets/solana-sol-logo.svg'
-import { LeaderboardProvider } from '../../TableContext/Context';
+import { LeaderboardProvider } from '../../Context/TableContext/Context';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Daily');

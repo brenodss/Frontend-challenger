@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/* React toastify overwrite */
+.Toastify__toast-container {
+  padding: 0;
+  margin: 0 !important;
+  
+}
+
+.Toastify__toast-theme--dark {
+  background-color: transparent !important;
+  color: white;
+  border-radius: 8px;
+  padding: 0px;
+  margin-bottom: 0px;
+}
 
 @theme {
   --color-primary: rgba(37, 34, 61, 1);

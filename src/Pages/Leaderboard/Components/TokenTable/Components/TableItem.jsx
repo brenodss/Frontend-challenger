@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { MobileLeaderboardItem } from '../MobileLeaderboard';
 import { LeaderboardItem } from '../LeaderBoardItem';
 import TableHeader from './TableHeader';
-import { useFilterContext } from '../../../../../TableContext/Context';
+import { useFilterContext } from '../../../../../Context/TableContext/Context';
 
 const ResponsiveLeaderBoard = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1375);

@@ -1,6 +1,6 @@
 import LeaderboardItem from "./Components/TableItem";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useFilterContext } from "../../../../TableContext/Context";
+import { useFilterContext } from "../../../../Context/TableContext/Context";
 
 export const TokenTable = () => {
   const {
@@ -9,8 +9,6 @@ export const TokenTable = () => {
     totalPages,
     itemsPerPage,
     goToPage,
-    changeItemsPerPage,
-    Headers,
   } = useFilterContext();
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;

@@ -1,4 +1,5 @@
 import { Share2 } from "lucide-react";
+import Orangie from './../../../../assets/Orangie.jpg';
 
 export const MobileLeaderboardItem = ({
   rank,
@@ -46,17 +47,17 @@ export const MobileLeaderboardItem = ({
       
       <div className={`w-24 h-24 absolute top-0 left-0 blur-3xl opacity-40 ${blurClass}`} />
 
-      <div className="flex flex-col items-start w-12">
+      <div className="flex flex-col items-start flex-grow flex-basis-12">
         <span className="text-gray-400">Rank</span>
         <span className={`w-6 h-6 rounded-full flex items-center justify-center font-semibold text-gray-200 ${bgClass} ${borderClass}`}>
           {rank}
         </span>
       </div>
 
-      <div className="flex flex-col items-start w-fit">
+      <div className="flex flex-col items-start flex-grow flex-basis-fit">
         <span className="text-gray-400">Trader</span>
         <div className="flex items-center">
-          <div className="w-6 h-6 rounded-full bg-purple-500 mr-2"></div>
+          <img src={Orangie} className="w-6 h-6 rounded-full border-2 border-purple-500 mr-2" />
           <div>
             <div className="text-white">{trader}</div>
             <div className="text-gray-400 text-[10px]">0xJiewfj...SgrjHger</div>
@@ -64,7 +65,7 @@ export const MobileLeaderboardItem = ({
         </div>
       </div>
 
-      <div className="flex flex-col items-end w-16">
+      <div className="flex flex-col items-end flex-grow flex-basis-16">
         <span className="text-gray-400">Followers</span>
         <div className="text-white font-semibold">{InfoX.followers}</div>
         <span className="text-gray-400 hover:text-blue-500 cursor-pointer font-normal text-[10px]">
@@ -72,17 +73,17 @@ export const MobileLeaderboardItem = ({
         </span>
       </div>
 
-      <div className="flex flex-col items-center w-16">
+      <div className="flex flex-col items-center flex-grow flex-basis-16">
         <span className="text-gray-400">Tokens</span>
         <span>{tokens}</span>
       </div>
 
-      <div className="flex flex-col items-end w-16">
+      <div className="flex flex-col items-end flex-grow flex-basis-16">
         <span className="text-gray-400">Win Rate</span>
         <span className="text-green-400">{winRate}%</span>
       </div>
 
-      <div className="flex flex-col items-end w-16">
+      <div className="flex flex-col items-end flex-grow flex-basis-16">
         <span className="text-gray-400">Trades</span>
         <div>
           <span className="text-green-400 font-semibold">{trades.wins}</span>
@@ -91,7 +92,7 @@ export const MobileLeaderboardItem = ({
         </div>
       </div>
 
-      <div className="flex flex-col items-end w-24">
+      <div className="flex flex-col items-end flex-grow flex-basis-24">
         <span className="text-gray-400">Avg Buy</span>
         <div className="text-white font-semibold flex items-end gap-x-0.5">
           {avgBuy.tokenAmount}
@@ -100,17 +101,17 @@ export const MobileLeaderboardItem = ({
         <span className="text-gray-400 font-normal text-end text-[10px]">{avgBuy.usdAmount}</span>
       </div>
 
-      <div className="flex flex-col items-center w-24">
+      <div className="flex flex-col items-center flex-grow flex-basis-24">
         <span className="text-gray-400">Avg Entry</span>
         <span>${avgEntry}</span>
       </div>
 
-      <div className="flex flex-col items-center w-24">
+      <div className="flex flex-col items-center flex-grow flex-basis-24">
         <span className="text-gray-400 text-end">Avg Hold</span>
         <span className="text-end">{avgHold}</span>
       </div>
 
-      <div className="flex flex-col items-end w-24">
+      <div className="flex flex-col items-end flex-grow flex-basis-24">
         <span className="text-gray-400">Realized PNL</span>
         <div className={`flex items-center gap-x-0.5 ${realizedPNL.tokenAmount.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
           {realizedPNL.tokenAmount}
@@ -119,7 +120,7 @@ export const MobileLeaderboardItem = ({
         <span className="text-gray-400 font-normal text-[10px]">{realizedPNL.usdAmount}</span>
       </div>
 
-      <div className="flex flex-col items-center w-16">
+      <div className="flex flex-col items-center flex-grow flex-basis-16">
         <span className="text-gray-400">Share</span>
         <button onClick={() => { }} className="p-2 hover:bg-primary rounded-lg cursor-pointer">
           <Share2 className="w-4 h-4" />

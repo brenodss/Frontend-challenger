@@ -1,11 +1,13 @@
 import { createContext, useContext, useState, useMemo } from "react";
-import SolanaLogo from '../assets/solana-sol-logo.svg';
+import SolanaLogo from '../../assets/solana-sol-logo.svg';
 
 const FilterContext = createContext();
 
 export const LeaderboardProvider = ({ children }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [sortField, setSortField] = useState(null);
+    const [sortDirection, setSortDirection] = useState('asc'); // Direção da ordenação
 
     const data = useMemo(() => [
         {
@@ -89,27 +91,70 @@ export const LeaderboardProvider = ({ children }) => {
     ], []);
 
     const Headers = useMemo(() => [
-        { title: 'Rank', field: 'rank', className: 'px-6 w-12 text-left' },
-        { title: 'Trader', field: 'trader', className: 'px-6 w-48 text-left' },
-        { title: 'Followers', field: 'InfoX.followers', className: 'px-6 w-48 text-end' },
-        { title: 'Tokens', field: 'tokens', className: 'px-6 w-20 text-center' },
-        { title: 'Win Rate', field: 'winRate', className: 'px-6 text-end' },
-        { title: 'Trades', field: 'trades.wins', className: 'px-6 w-24 text-center' },
-        { title: 'Avg Buy', field: 'avgBuy.usdAmount', className: 'px-6 w-32 text-end' },
-        { title: 'Avg Entry', field: 'avgEntry', className: 'px-6 w-32 text-center' },
-        { title: 'Avg Hold', field: 'avgHold', className: 'px-6 w-32 text-center' },
-        { title: 'Realized PNL', field: 'realizedPNL.usdAmount', className: 'px-6 w-32 text-end' },
-        { title: 'Share', field: 'share', className: 'px-6 w-16 text-center' },
+        { title: 'Rank', field: 'rank', className: 'px-1 text-left', sortable: false },
+        { title: 'Trader', field: 'trader', className: 'px-1 text-left', sortable: false },
+        { title: 'Followers', field: 'InfoX.followers', className: 'px-1 text-end', sortable: true },
+        { title: 'Tokens', field: 'tokens', className: 'px-1 text-center', sortable: true },
+        { title: 'Win Rate', field: 'winRate', className: 'px-1 text-end', sortable: true },
+        { title: 'Trades', field: 'trades', className: 'px-1 text-center', sortable: true },
+        { title: 'Avg Buy', field: 'avgBuy.usdAmount', className: 'px-1 text-end', sortable: true },
+        { title: 'Avg Entry', field: 'avgEntry', className: 'px-1 text-center', sortable: true },
+        { title: 'Avg Hold', field: 'avgHold', className: 'px-1 text-center', sortable: true },
+        { title: 'Realized PNL', field: 'realizedPNL.usdAmount', className: 'px-1 text-end', sortable: true },
+        { title: 'Share', field: 'share', className: 'px-1 text-center', sortable: false },
     ], []);
 
-    const totalItems = data.length;
+    const parseAvgHold = (avgHold) => {
+        if (avgHold.endsWith('m')) {
+            return parseInt(avgHold, 10);
+        } else if (avgHold.endsWith('h')) {
+            return parseInt(avgHold, 10) * 60;
+        }
+        return 0;
+    };
+
+    const sortedData = useMemo(() => {
+        if (!sortField) return data;
+
+        return [...data].sort((a, b) => {
+            let valueA, valueB;
+
+            switch (sortField) {
+                case 'trades':
+                    valueA = a.trades.wins + a.trades.losses;
+                    valueB = b.trades.wins + b.trades.losses;
+                    break;
+                case 'avgHold':
+                    valueA = parseAvgHold(a.avgHold);
+                    valueB = parseAvgHold(b.avgHold);
+                    break;
+                default:
+                    valueA = a[sortField];
+                    valueB = b[sortField];
+                    break;
+            }
+
+            if (typeof valueA === 'string' && valueA.includes('$')) {
+                valueA = parseFloat(valueA.replace('$', '').replace('K', ''));
+                valueB = parseFloat(valueB.replace('$', '').replace('K', ''));
+            }
+
+            if (sortDirection === 'asc') {
+                return valueA - valueB;
+            } else {
+                return valueB - valueA;
+            }
+        });
+    }, [data, sortField, sortDirection]);
+
+    const totalItems = sortedData.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const paginatedData = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-        return data.slice(startIndex, endIndex);
-    }, [data, currentPage, itemsPerPage]);
+        return sortedData.slice(startIndex, endIndex);
+    }, [sortedData, currentPage, itemsPerPage]);
 
     const goToPage = (page) => {
         if (page >= 1 && page <= totalPages) {
@@ -122,6 +167,15 @@ export const LeaderboardProvider = ({ children }) => {
         setCurrentPage(1);
     };
 
+    const handleSort = (field) => {
+        if (field === sortField) {
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortField(field);
+            setSortDirection('asc');
+        }
+    };
+
     const globalStates = {
         Headers,
         data: paginatedData,
@@ -129,7 +183,10 @@ export const LeaderboardProvider = ({ children }) => {
         totalPages,
         itemsPerPage,
         goToPage,
-        changeItemsPerPage
+        changeItemsPerPage,
+        handleSort,
+        sortField,
+        sortDirection
     };
 
     return (
