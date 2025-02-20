@@ -1,7 +1,8 @@
-import { Share2 } from "lucide-react";
+import { ClipboardCheck, ClipboardCheckIcon, Copy, CopyIcon, Share2 } from "lucide-react";
 import Orangie from "../../../../assets/Orangie.jpg";
 import { useNavigate } from "react-router-dom";
 import { useModalContext } from "../../../../Context/ModalContext/ModalContext";
+import { useState } from "react";
 
 export const LeaderboardItem = ({ rank, trader, InfoX, tokens, winRate, trades, avgBuy, avgEntry, avgHold, realizedPNL }) => {
   const { openModal } = useModalContext();
@@ -32,9 +33,23 @@ export const LeaderboardItem = ({ rank, trader, InfoX, tokens, winRate, trades, 
     return { bgClass, borderClass, blurClass };
   };
 
+  const [isCopied, setIsCopied] = useState(false); // Estado para controlar o efeito de "copiado"
+
+  const handleCopy = (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText("0xJiewfj...SgrjHger") // Copia o texto
+      .then(() => {
+        setIsCopied(true); // Ativa o efeito de "copiado"
+        setTimeout(() => setIsCopied(false), 2000); // Desativa após 2 segundos
+      })
+      .catch((err) => {
+        console.error("Falha ao copiar texto: ", err);
+      });
+  };
+
   return (
     <tr onClick={() => {
-      if(true) {
+      if (true) {
         navigate('/trader') // Here, if wallet is connected, navigate to trader page, else open modal
       } else {
         openModal()
@@ -47,7 +62,7 @@ export const LeaderboardItem = ({ rank, trader, InfoX, tokens, winRate, trades, 
           <div
             className={`absolute top-1/2 left-0 transform -translate-x-1/2 -translate-y-1/2 w-16 h-24 blur-xl opacity-15 ${GetRankStyles(rank).blurClass}`}
             style={{
-              clipPath: 'inset(0px -999px 0px 0px)', 
+              clipPath: 'inset(0px -999px 0px 0px)',
             }}
           />
           <span className={`relative w-8 h-8 rounded-full flex items-center justify-center font-semibold ${GetRankStyles(rank).bgClass} ${GetRankStyles(rank).borderClass}`}>
@@ -58,10 +73,23 @@ export const LeaderboardItem = ({ rank, trader, InfoX, tokens, winRate, trades, 
 
       <td className="py-4 w-24">
         <div className="flex items-center">
-          <img src={Orangie} className="w-12 h-12 rounded-full bg-purple-500 mr-2 border-2 border-purple-500"/>
+          <img src={Orangie} className="w-12 h-12 rounded-full bg-purple-500 mr-2 border-2 border-purple-500" />
           <div>
             <div className="text-white">{trader}</div>
-            <div className="text-gray-400 text-sm">0xJiewfj...SgrjHger</div>
+            <div className="text-gray-400 text-sm">
+
+              <button
+                onClick={handleCopy}
+                className="flex flex-row items-center gap-x-1 cursor-pointer"
+              >
+                <span>0xJiewfj...SgrjHger</span>
+                {
+                  isCopied ? <ClipboardCheckIcon className="w-3 h-3 text-green-400 hover:text-white cursor-pointer" /> :
+                  <CopyIcon className="w-3 h-3 text-gray-400 hover:text-white cursor-pointer" />
+                }
+              </button>
+
+            </div>
           </div>
         </div>
       </td>
